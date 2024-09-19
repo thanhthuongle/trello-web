@@ -34,7 +34,7 @@ function Profile() {
           aria-expanded={open ? 'true' : undefined}
         >
           <Avatar
-            sx={{ width: 34, height: 34 }}
+            sx={{ width: 36, height: 36 }}
             alt='Sugiahoabinh'
             src='/src/assets/avatar.jpg'
           />
