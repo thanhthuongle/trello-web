@@ -37,7 +37,8 @@ const BoardBar = () => {
       gap: 2,
       overflowX: 'auto',
       borderBottom: '1px solid white',
-      backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2')
+      backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
+      '&::-webkit-scrollbar-track': { m: 2 }
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Chip
@@ -97,7 +98,10 @@ const BoardBar = () => {
               width: '34px',
               height: '34px',
               fontSize: '16px',
-              border: 'none'
+              border: 'none',
+              color: 'white',
+              cursor: 'pointer',
+              '&.MuiAvatar-colorDefault': { bgcolor: '#a4b0be' }
             }
           }}
         >
