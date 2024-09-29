@@ -31,6 +31,7 @@ module.exports = {
 
     // Common
     'no-console': 1, // no console.log
+    'no-extra-boolean-cast': 0,
     'no-lonely-if': 1, // không để if lẻ trong else -> nên dùng else if
     'no-unused-vars': 1, // cảnh báo biến khai báo nhưng không dùng
     'no-trailing-spaces': 1, // cảnh báo khoảng trống dư thừa
