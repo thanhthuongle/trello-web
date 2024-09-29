@@ -15,9 +15,10 @@ import {
   // rectIntersection,
   getFirstCollision
 } from '@dnd-kit/core'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { cloneDeep } from 'lodash'
 import { arrayMove } from '@dnd-kit/sortable'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { cloneDeep, isEmpty } from 'lodash'
+import { generatePlaceholderCard } from '~/utils/formatters'
 
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
@@ -79,6 +80,12 @@ const BoardContent = ({ board }) => {
 
       if (nextActiveColumns) {
         nextActiveColumns.cards = nextActiveColumns.cards.filter(card => card._id !== activeDraggingCardId)
+
+        // Thêm placeholder card nếu column rỗng
+        if (isEmpty( nextActiveColumns.cards)) {
+          nextActiveColumns.cards = [generatePlaceholderCard(nextActiveColumns)]
+        }
+
         nextActiveColumns.cardOrderIds = nextActiveColumns.cards.map(card => card._id)
       }
       if (nextOverColumns) {
@@ -88,6 +95,10 @@ const BoardContent = ({ board }) => {
           columnId: nextOverColumns._id
         }
         nextOverColumns.cards = nextOverColumns.cards.toSpliced(newCardIndex, 0, rebuild_activeDraggingCardData)
+
+        // Xóa placeholder card khi có card mới được di chuyển tới(sẽ khác rỗng)
+        nextOverColumns.cards = nextOverColumns.cards.filter(card => !card.FE_PlaceholderCard)
+
         nextOverColumns.cardOrderIds = nextOverColumns.cards.map(card => card._id)
       }
 
