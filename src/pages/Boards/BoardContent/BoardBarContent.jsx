@@ -44,6 +44,51 @@ const BoardContent = ({ board }) => {
     return orderedColumns.find(column => column?.cards.map(card => card?._id).includes(cardId))
   }
 
+  const moveCardBetweenDifferentColumns = (
+    overColumn,
+    overCardId,
+    active,
+    over,
+    activeColumn,
+    activeDraggingCardId,
+    activeDraggingCardData
+  ) => {
+    setOrderedColumns(prevColumns => {
+      const overCardIndex = overColumn?.cards?.findIndex(card => card._id === overCardId)
+      // console.log('overCardIndex: ', overCardIndex)
+
+      let newCardIndex
+      const isBelowOverItem = active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height
+      const modifier = isBelowOverItem ? 1 : 0
+      newCardIndex = overCardIndex >= 0 ? overCardIndex + modifier : overColumn?.card?.length + 1
+
+      // console.log('isBelowOverItem: ', isBelowOverItem)
+      // console.log('modifier: ', modifier)
+      // console.log('newCardIndex: ', newCardIndex)
+
+      const nextColumns = cloneDeep(prevColumns)
+      const nextActiveColumns = nextColumns.find(column => column._id === activeColumn._id)
+      const nextOverColumns = nextColumns.find(column => column._id === overColumn._id)
+
+      if (nextActiveColumns) {
+        nextActiveColumns.cards = nextActiveColumns.cards.filter(card => card._id !== activeDraggingCardId)
+        nextActiveColumns.cardOrderIds = nextActiveColumns.cards.map(card => card._id)
+      }
+      if (nextOverColumns) {
+        nextOverColumns.cards = nextOverColumns.cards.filter(card => card._id !== activeDraggingCardId)
+        const rebuild_activeDraggingCardData = {
+          ...activeDraggingCardData,
+          columnId: nextOverColumns._id
+        }
+        nextOverColumns.cards = nextOverColumns.cards.toSpliced(newCardIndex, 0, rebuild_activeDraggingCardData)
+        nextOverColumns.cardOrderIds = nextOverColumns.cards.map(card => card._id)
+      }
+
+      return nextColumns
+    }
+    )
+  }
+
   const handleDragStart = (event) => {
     // console.log('handleDragStart', event)
     setActiveDragItemId(event?.active?.id)
@@ -78,35 +123,14 @@ const BoardContent = ({ board }) => {
     if (!activeColumn || !overColumn) return
 
     if (activeColumn._id !== overColumn._id) {
-      setOrderedColumns(prevColumns => {
-        const overCardIndex = overColumn?.cards?.findIndex(card => card._id === overCardId)
-        // console.log('overCardIndex: ', overCardIndex)
-
-        let newCardIndex
-        const isBelowOverItem = active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height
-        const modifier = isBelowOverItem ? 1 : 0
-        newCardIndex = overCardIndex >= 0 ? overCardIndex + modifier : overColumn?.card?.length + 1
-
-        // console.log('isBelowOverItem: ', isBelowOverItem)
-        // console.log('modifier: ', modifier)
-        // console.log('newCardIndex: ', newCardIndex)
-
-        const nextColumns = cloneDeep(prevColumns)
-        const nextActiveColumns = nextColumns.find(column => column._id === activeColumn._id)
-        const nextOverColumns = nextColumns.find(column => column._id === overColumn._id)
-
-        if (nextActiveColumns) {
-          nextActiveColumns.cards = nextActiveColumns.cards.filter(card => card._id !== activeDraggingCardId)
-          nextActiveColumns.cardOrderIds = nextActiveColumns.cards.map(card => card._id)
-        }
-        if (nextOverColumns) {
-          nextOverColumns.cards = nextOverColumns.cards.filter(card => card._id !== activeDraggingCardId)
-          nextOverColumns.cards = nextOverColumns.cards.toSpliced(newCardIndex, 0, activeDraggingCardData)
-          nextOverColumns.cardOrderIds = nextOverColumns.cards.map(card => card._id)
-        }
-
-        return nextColumns
-      }
+      moveCardBetweenDifferentColumns(
+        overColumn,
+        overCardId,
+        active,
+        over,
+        activeColumn,
+        activeDraggingCardId,
+        activeDraggingCardData
       )
     }
   }
@@ -120,19 +144,30 @@ const BoardContent = ({ board }) => {
     // Xử lý kéo thả card: todo: vẫn còn bug khi kéo thả lần đầu thì stae chưa có data được sort mà mới chỉ có data dạng thô khi fe nhận đc
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
 
+      const { id: activeDraggingCardId, data: { current: activeDraggingCardData } } = active
       const { id: overCardId } = over
 
+      const activeColumn = findColumnByCardId(activeDraggingCardId)
       const overColumn = findColumnByCardId(overCardId)
       // console.log('activeColumn: ', activeColumn)
       // console.log('overColumn: ', overColumn)
 
-      if (!oldColumnwhenDraggingCard || !overColumn) return
+      if (!activeColumn || !overColumn) return
 
       // console.log('oldColumnwhenDraggingCard: ', oldColumnwhenDraggingCard)
       // console.log('overColumn: ', overColumn)
 
       if (oldColumnwhenDraggingCard._id !== overColumn._id) {
         // console.log('hành đông kéo thả card giữa 2 column khác nhau')
+        moveCardBetweenDifferentColumns(
+          overColumn,
+          overCardId,
+          active,
+          over,
+          activeColumn,
+          activeDraggingCardId,
+          activeDraggingCardData
+        )
       } else {
         // console.log('hành đông kéo thả card trong 1 column')
         const oldCardIndex = oldColumnwhenDraggingCard?.cards?.findIndex(c => c._id === activeDragItemId)
