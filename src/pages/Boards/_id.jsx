@@ -11,7 +11,7 @@ const Board = () => {
 
   useEffect(() => {
     // Sử dụng react-router-dom để lấy id của board sau, tạm thời fic cứng  boardId
-    const boardId = '6714df8c928795d87e2c7d6a'
+    const boardId = '6717ab6cdb1d84f6070c06a8'
 
     // Call API
     fetchBoardDetailsAPI(boardId).then((board) => {
