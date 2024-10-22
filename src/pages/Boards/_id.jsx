@@ -5,6 +5,7 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardBarContent'
 import { useEffect, useState } from 'react'
 import { fetchBoardDetailsAPI } from '~/apis'
+// import { mockData } from '~/apis/mock-data'
 
 const Board = () => {
   const [board, setBoard] = useState(null)
