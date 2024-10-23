@@ -24,6 +24,7 @@ import { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import theme from '~/theme'
+import { toast } from 'react-toastify'
 
 function Column({ column }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -55,7 +56,7 @@ function Column({ column }) {
 
   const addNewCard = () => {
     if (!newCardTitle) {
-      // console.error('please enter title Card')
+      toast.error('please enter Card title', { position: 'bottom-right' })
       return
     }
 
