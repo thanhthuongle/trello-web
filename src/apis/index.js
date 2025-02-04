@@ -17,6 +17,11 @@ export const createNewColumnAPI = async (newColumnData) => {
   return response.data
 }
 
+export const updateColumnDetailsAPI = async (columnId, updateData) => {
+  const response = await axios.put(`${import.meta.env.VITE_API_URL}/columns/${columnId}`, updateData)
+  return response.data
+}
+
 /** Card */
 export const createNewCardAPI = async (newCardnData) => {
   const response = await axios.post(`${import.meta.env.VITE_API_URL}/cards`, newCardnData)
