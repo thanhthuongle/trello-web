@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box'
 import ListColumns from './ListColumns/ListColumns'
-import { mapOrder } from '~/utils/sorts'
 import {
   DndContext,
   // MouseSensor,
@@ -29,7 +28,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) => {
+const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns, moveCardsInTheSameColumn }) => {
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 500 } })
   const sensors = useSensors( mouseSensor, touchSensor)
@@ -46,7 +45,7 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
   const lastOverId = useRef(null)
 
   useEffect( () => {
-    setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+    setOrderedColumns(board?.columns)
   }, [board])
 
   const findColumnByCardId = (cardId) => {
@@ -194,15 +193,18 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
 
 
         const dndOrderedCards = arrayMove(oldColumnwhenDraggingCard?.cards, oldCardIndex, newCardIndex)
+        const dndOrderedCardIds = dndOrderedCards.map(card => card._id)
 
         setOrderedColumns(prevColumns => {
           const nextColumns = cloneDeep(prevColumns)
           const targetColumn = nextColumns.find(column => column._id === overColumn._id)
           targetColumn.cards = dndOrderedCards
-          targetColumn.cardOrderIds = dndOrderedCards.map(card => card._id)
+          targetColumn.cardOrderIds = dndOrderedCardIds
 
           return nextColumns
         })
+
+        moveCardsInTheSameColumn(dndOrderedCards, dndOrderedCardIds, oldColumnwhenDraggingCard._id)
       }
     }
 
@@ -217,6 +219,8 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
         // const dndOrderedColumnsIds = dndOrderedColumns.map( c => c._id)
         // console.log('dndOrderedColumns: ', dndOrderedColumns)
 
+        setOrderedColumns(dndOrderedColumns)
+
         /**
         * Gọi lên props function moveColumns nằm ở component cha cao nhất (boards/_id.jsx)
         * Lưu ý: Về sau ở học phần MERN Stack Advance nâng cao học trực tiếp mình sẽ với mình thì chúng ta sẽ đưa dữ liệu Board ra ngoài Redux Global Store,
@@ -225,7 +229,6 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
         */
         moveColumns(dndOrderedColumns)
 
-        setOrderedColumns(dndOrderedColumns)
       }
     }
 
