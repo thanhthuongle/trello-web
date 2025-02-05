@@ -28,7 +28,14 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns, moveCardsInTheSameColumn }) => {
+const BoardContent = ({
+  board,
+  createNewColumn,
+  createNewCard,
+  moveColumns,
+  moveCardsInTheSameColumn,
+  moveCardToDifferentColumn
+}) => {
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 500 } })
   const sensors = useSensors( mouseSensor, touchSensor)
@@ -59,7 +66,8 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns, move
     over,
     activeColumn,
     activeDraggingCardId,
-    activeDraggingCardData
+    activeDraggingCardData,
+    triggerFrom
   ) => {
     setOrderedColumns(prevColumns => {
       const overCardIndex = overColumn?.cards?.findIndex(card => card._id === overCardId)
@@ -100,6 +108,10 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns, move
         nextOverColumns.cards = nextOverColumns.cards.filter(card => !card.FE_PlaceholderCard)
 
         nextOverColumns.cardOrderIds = nextOverColumns.cards.map(card => card._id)
+      }
+
+      if (triggerFrom === 'handleDragEnd') {
+        moveCardToDifferentColumn(activeDraggingCardId, oldColumnwhenDraggingCard._id, nextOverColumns._id, nextColumns)
       }
 
       return nextColumns
@@ -148,7 +160,8 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns, move
         over,
         activeColumn,
         activeDraggingCardId,
-        activeDraggingCardData
+        activeDraggingCardData,
+        'handleDragOver'
       )
     }
   }
@@ -184,7 +197,8 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns, move
           over,
           activeColumn,
           activeDraggingCardId,
-          activeDraggingCardData
+          activeDraggingCardData,
+          'handleDragEnd'
         )
       } else {
         // console.log('hành đông kéo thả card trong 1 column')
