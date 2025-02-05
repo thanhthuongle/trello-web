@@ -27,6 +27,11 @@ export const updateColumnDetailsAPI = async (columnId, updateData) => {
   return response.data
 }
 
+export const deleteColumnDetailsAPI = async (columnId) => {
+  const response = await axios.delete(`${import.meta.env.VITE_API_URL}/columns/${columnId}`)
+  return response.data
+}
+
 /** Card */
 export const createNewCardAPI = async (newCardnData) => {
   const response = await axios.post(`${import.meta.env.VITE_API_URL}/cards`, newCardnData)
