@@ -20,19 +20,22 @@ import {
 } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { cloneDeep } from 'lodash'
+import { useParams } from 'react-router-dom'
 
 const Board = () => {
   const dispath = useDispatch()
   // const [board, setBoard] = useState(null)
   const board = useSelector(selectCurrentActiveBoard)
 
+  const { boardId } = useParams()
+
   useEffect(() => {
     // Sử dụng react-router-dom để lấy id của board sau, tạm thời fix cứng  boardId
-    const boardId = '6717ab6cdb1d84f6070c06a8'
+    // const boardId = '6717ab6cdb1d84f6070c06a8'
 
     // Call API
     dispath(fetchBoardDetailsAPI(boardId))
-  }, [dispath])
+  }, [dispath, boardId])
 
   // Gọi API và xử lý sau khi kéo thả xong xuôi
   const moveColumns = (dndOrderedColumns) => {
