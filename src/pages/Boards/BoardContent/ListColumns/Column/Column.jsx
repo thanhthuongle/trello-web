@@ -22,11 +22,21 @@ import { CSS } from '@dnd-kit/utilities'
 import { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
-import theme from '~/theme'
 import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
+import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis'
+import { cloneDeep } from 'lodash'
+import {
+  updateCurrentActiveBoard,
+  selectCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
 
-function Column({ column, createNewCard, deleteColumnDetails }) {
+import { useDispatch, useSelector } from 'react-redux'
+
+function Column({ column }) {
+  const dispath = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
+
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
     data: { ...column }
@@ -65,7 +75,29 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
       title: newCardTitle,
       columnId: column._id
     }
-    await createNewCard(newCardData)
+
+
+    // Gọi APi tạo Card mới
+    const createdCard = await createNewCardAPI({
+      ...newCardData,
+      boardId: board._id
+    })
+
+    // cập nhật state board
+    // const newBoard = { ...board }
+    const newBoard = cloneDeep(board)
+    const columnToUpdate = newBoard.columns.find(column => column._id === createdCard.columnId)
+    if (columnToUpdate) {
+      if (columnToUpdate.cards.some(card => card.FE_PlaceholderCard)) {
+        columnToUpdate.cards = [createdCard]
+        columnToUpdate.cardOrderIds = [createdCard._id]
+      } else {
+        columnToUpdate.cards.push(createdCard)
+        columnToUpdate.cardOrderIds.push(createdCard._id)
+      }
+    }
+    dispath(updateCurrentActiveBoard(newBoard))
+
 
     // Đóng trạng thái thêm Card và reset input
     toggleOpenNewCardForm()
@@ -78,7 +110,7 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
       title: 'Delete column!',
       description: 'This action is permanent delete column! Are you sure?',
       confirmationText: 'Confirm',
-      cancellationText: 'Cancel',
+      cancellationText: 'Cancel'
 
       // allowClose: false,
       // dialogProps: { maxWidth: 'xs' },
@@ -88,7 +120,20 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
       // description: 'Phải nhập chữ "sugiahoabinh" mới được confirm',
       // confirmationKeyword: 'sugiahoabinh',
     }).then(() => {
-      deleteColumnDetails(column._id)
+      //update chuẩn dữ liệu cho state board
+      // const newBoard = { ...board }
+      // newBoard.columns = newBoard.columns.filter(c => c._id !== columnId)
+      // newBoard.columnOrderIds = newBoard.columns.filter(_id => _id !== columnId)
+      // setBoard(newBoard)
+      deleteColumnDetailsAPI(column._id).then(res => {
+        //update chuẩn dữ liệu cho state board
+        const newBoard = { ...board }
+        newBoard.columns = newBoard.columns.filter(c => c._id !== column._id)
+        newBoard.columnOrderIds = newBoard.columns.filter(_id => _id !== column._id)
+        dispath(updateCurrentActiveBoard(newBoard))
+        // setBoard(newBoard)
+        toast.success(res?.deleteResult)
+      })
     }).catch(() => {})
   }
 

@@ -1,11 +1,12 @@
 import axios from 'axios'
-import { API_URL } from '~/utils/constants'
+// import { API_URL } from '~/utils/constants'
 
 /** Board */
-export const fetchBoardDetailsAPI = async (boardId) => {
-  const response = await axios.get(`${import.meta.env.VITE_API_URL}/boards/${boardId}`)
-  return response.data
-}
+// Đã move sang redux
+// export const fetchBoardDetailsAPI = async (boardId) => {
+//   const response = await axios.get(`${import.meta.env.VITE_API_URL}/boards/${boardId}`)
+//   return response.data
+// }
 
 export const updateBoardDetailsAPI = async (boardId, updateData) => {
   const response = await axios.put(`${import.meta.env.VITE_API_URL}/boards/${boardId}`, updateData)
