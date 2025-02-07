@@ -1,4 +1,5 @@
 import authorizedAxiosInstance from '~/utils/authorizeAxios'
+import { toast } from 'react-toastify'
 // import { API_URL } from '~/utils/constants'
 
 /** Board */
@@ -38,5 +39,18 @@ export const deleteColumnDetailsAPI = async (columnId) => {
 /** Card */
 export const createNewCardAPI = async (newCardnData) => {
   const response = await authorizedAxiosInstance.post(`${import.meta.env.VITE_API_URL}/cards`, newCardnData)
+  return response.data
+}
+
+/** Users */
+export const registerUserAPI = async (data) => {
+  const response = await authorizedAxiosInstance.post(`${import.meta.env.VITE_API_URL}/users/register`, data)
+  toast.success ('Account created successfully! Please check and verify your account before logging in!', { theme: 'colored' })
+  return response.data
+}
+
+export const verifyUserAPI = async (data) => {
+  const response = await authorizedAxiosInstance.put(`${import.meta.env.VITE_API_URL}/users/verify`, data)
+  toast.success ('Account verified successfully! Now you can login to enjoy our services! Have a goodday!', { theme: 'colored' })
   return response.data
 }
