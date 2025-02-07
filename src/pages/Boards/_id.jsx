@@ -34,6 +34,7 @@ const Board = () => {
     // const boardId = '6717ab6cdb1d84f6070c06a8'
 
     // Call API
+    console.log('Fetching board data for ID:', boardId);
     dispath(fetchBoardDetailsAPI(boardId))
   }, [dispath, boardId])
 
