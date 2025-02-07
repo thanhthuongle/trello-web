@@ -12,6 +12,9 @@ export default defineConfig({
     svgr()
   ],
   base: '/',
+  build: {
+    outDir: 'dist'
+  },
   resolve: {
     alias: [
       { find: '~', replacement: '/src' }
