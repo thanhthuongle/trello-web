@@ -287,6 +287,7 @@ function Column({ column }) {
               />
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} data-no-dnd="true">
                 <Button
+                  className='interceptor-loading'
                   onClick={addNewCard}
                   variant='contained'
                   color='success'
