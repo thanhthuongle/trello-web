@@ -28,14 +28,10 @@ const Board = () => {
   const board = useSelector(selectCurrentActiveBoard)
 
   const { boardId } = useParams()
-  console.log('🚀 ~ Board ~ boardId:', boardId)
-  
 
   useEffect(() => {
     // Sử dụng react-router-dom để lấy id của board sau, tạm thời fix cứng  boardId
     // const boardId = '6717ab6cdb1d84f6070c06a8'
-
-    console.log('🚀 ~ Board ~ boardId in useEffect:', boardId)
 
     // Call API
     dispath(fetchBoardDetailsAPI(boardId))
