@@ -13,6 +13,7 @@ import Logout from '@mui/icons-material/Logout'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectCurrentUser, logoutUserAPI } from '~/redux/user/userSlice'
 import { useConfirm } from 'material-ui-confirm'
+import { Link } from 'react-router-dom'
 
 function Profile() {
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -66,16 +67,20 @@ function Profile() {
           'aria-labelledby': 'basic-button-starred'
         }}
       >
-        <MenuItem sx={{
-          '&:hover': { color: 'success.light' }
-        }}>
-          <Avatar
-            sx={{ width: 32, height: 32, ml: -0.5, mr: 1 }}
-            alt='Sugiahoabinh'
-            src={currentUser?.avatar}
-          /> Profile
-        </MenuItem>
+        <Link to='/settings/account' style={{ color: 'inherit' }}>
+          <MenuItem sx={{
+            '&:hover': { color: 'success.light' }
+          }}>
+            <Avatar
+              sx={{ width: 32, height: 32, ml: -0.5, mr: 1 }}
+              alt='Sugiahoabinh'
+              src={currentUser?.avatar}
+            /> Profile
+          </MenuItem>
+        </Link>
+
         <Divider />
+
         <MenuItem>
           <ListItemIcon>
             <PersonAdd fontSize="small" />
