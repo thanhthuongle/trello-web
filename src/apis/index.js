@@ -59,3 +59,8 @@ export const refreshTokenAPI = async () => {
   const response = await authorizedAxiosInstance.get(`${import.meta.env.VITE_API_URL}/users/refresh_token`)
   return response.data
 }
+
+export const fetchBoardsAPI = async (searchPath) => {
+  const response = await authorizedAxiosInstance.get(`${import.meta.env.VITE_API_URL}/boards${searchPath}`)
+  return response.data
+}
