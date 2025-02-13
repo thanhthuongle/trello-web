@@ -9,6 +9,12 @@ import { toast } from 'react-toastify'
 //   return response.data
 // }
 
+export const createNewBoardAPI = async (data) => {
+  const response = await authorizedAxiosInstance.post(`${import.meta.env.VITE_API_URL}/boards`, data)
+  toast.success ('Board created successfully')
+  return response.data
+}
+
 export const updateBoardDetailsAPI = async (boardId, updateData) => {
   const response = await authorizedAxiosInstance.put(`${import.meta.env.VITE_API_URL}/boards/${boardId}`, updateData)
   // const response = await authorizedAxiosInstance.put(`${API_URL}/boards/${boardId}`, updateData)
