@@ -70,3 +70,8 @@ export const fetchBoardsAPI = async (searchPath) => {
   const response = await authorizedAxiosInstance.get(`${import.meta.env.VITE_API_URL}/boards${searchPath}`)
   return response.data
 }
+
+export const updateCardDetailsAPI = async (cardId, updateData) => {
+  const response = await authorizedAxiosInstance.put(`${import.meta.env.VITE_API_URL}/cards/${cardId}`, updateData)
+  return response.data
+}
