@@ -5,8 +5,6 @@ import VpnLockIcon from '@mui/icons-material/VpnLock'
 import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import BoltIcon from '@mui/icons-material/Bolt'
 import FilterListIcon from '@mui/icons-material/FilterList'
-import Avatar from '@mui/material/Avatar'
-import AvatarGroup from '@mui/material/AvatarGroup'
 import Tooltip from '@mui/material/Tooltip'
 import Button from '@mui/material/Button'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
@@ -133,7 +131,7 @@ const BoardBar = ({ board }) => {
           </Tooltip>
         </AvatarGroup> */}
 
-        <BoardUserGroup />
+        <BoardUserGroup boardUsers={board?.FE_allUsers} />
       </Box>
     </Box>
   )

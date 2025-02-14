@@ -1,5 +1,11 @@
 {
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
-  ]
+  ],
+  "images": {
+    "localPatterns": [{
+      "pathname": "^/assets/.*$",
+      "search": ""
+    }]
+  }
 }
