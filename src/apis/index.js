@@ -75,3 +75,9 @@ export const updateCardDetailsAPI = async (cardId, updateData) => {
   const response = await authorizedAxiosInstance.put(`${import.meta.env.VITE_API_URL}/cards/${cardId}`, updateData)
   return response.data
 }
+
+export const inviteUserToBoardAPI = async (data) => {
+  const response = await authorizedAxiosInstance.post(`${import.meta.env.VITE_API_URL}/invitations/board`, data)
+  toast.success('User invited to board successfully!')
+  return response.data
+}
