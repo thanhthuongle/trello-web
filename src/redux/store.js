@@ -17,7 +17,7 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 const rootPersistConfig = {
   key: 'root', // key của cái persist do chúng ta chỉ định, mặc định là root
   storage: storage, // Biến storage ở trên - lưu vào localstorage
-  // whitelist: ['user'] // Định nghĩa cái slide dữ liệu ĐƯỢC PHÉP duy trì qua mõi lần f5 trình duyệt
+  whitelist: ['user'] // Định nghĩa cái slide dữ liệu ĐƯỢC PHÉP duy trì qua mõi lần f5 trình duyệt
   // blacklist: ['user'] // Định nghã các slide KHÔNG ĐƯỢC PHÉP duy trì qua mỗi lần f5 trình duyệt
 }
 
