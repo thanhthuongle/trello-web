@@ -5,6 +5,7 @@ import GlobalStyles from '@mui/material/GlobalStyles'
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles'
 import theme from './theme'
 import { ConfirmProvider } from 'material-ui-confirm'
+import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
 
 // Cấu hình react-toastify
 import { ToastContainer } from 'react-toastify'
@@ -28,7 +29,7 @@ injectStore(store)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
+    <PersistGate loading={<PageLoadingSpinner caption='Loading...' />} persistor={persistor}>
       <BrowserRouter basename='/'>
         <CssVarsProvider theme={theme}>
           <ConfirmProvider
