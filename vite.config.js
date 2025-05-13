@@ -11,13 +11,17 @@ export default defineConfig({
     react(),
     svgr()
   ],
-  base: '/',
-  build: {
-    outDir: 'dist'
-  },
   resolve: {
     alias: [
       { find: '~', replacement: '/src' }
     ]
+  },
+  build: {
+    // Tạo fallback cho các route không tồn tại vật lý
+    rollupOptions: {
+      input: {
+        main: './index.html'
+      }
+    }
   }
 })
