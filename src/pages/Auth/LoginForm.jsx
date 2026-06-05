@@ -65,7 +65,7 @@ function LoginForm() {
             <Avatar sx={{ bgcolor: 'primary.main' }}><TrelloIcon /></Avatar>
           </Box>
           <Box sx={{ marginTop: '1em', display: 'flex', justifyContent: 'center', color: theme => theme.palette.grey[500] }}>
-            Author: Sugiahoabinh
+            Author: Le Thanh Thuong
           </Box>
           <Box sx={{ marginTop: '1em', display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '0 1em' }}>
             {verifiedEmail &&
@@ -135,7 +135,7 @@ function LoginForm() {
             </Button>
           </CardActions>
           <Box sx={{ padding: '0 1em 1em 1em', textAlign: 'center' }}>
-            <Typography>New to Trello MERN Stack Advanced?</Typography>
+            <Typography>Don't have an account?</Typography>
             <Link to="/register" style={{ textDecoration: 'none' }}>
               <Typography sx={{ color: 'primary.main', '&:hover': { color: '#ffbb39' } }}>Create account!</Typography>
             </Link>
